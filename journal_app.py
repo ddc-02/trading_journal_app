@@ -554,7 +554,7 @@ def render_calendar_view(pnl_lookup, daily_pnl):
 
 # --- UI LAYOUT ---
 st.markdown("## Dhruv's Analytics Dashboard")
-col_title, col_calc, col_analyzer = st.columns([4, 1, 1])
+col_title, col_calc, col_analyzer = st.columns([6, 1, 1])
 
 
 
