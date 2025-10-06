@@ -17,9 +17,6 @@ def get_google_sheet_client():
     """Initializes and returns the gspread client using Streamlit secrets."""
     try:
         # Check if secrets are available
-        if not st.secrets:
-            st.error("GCP service account secrets not found in .streamlit/secrets.toml.")
-            return None
         
         # Use st.secrets to authenticate gspread
         # The key in st.secrets must match the header in secrets.toml ([gcp_service_account])
