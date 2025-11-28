@@ -110,8 +110,8 @@ def render_calculator_popover():
         # If 'lots' = 1, we assume it means 1 unit. If you trade 75 units, input 75.
         
         # Calculate Gross Sold Value and Gross Bought Value
-        gross_sold = sold_price * lots *75
-        gross_bought = bought_price * lots*75
+        gross_sold = sold_price * lots *65
+        gross_bought = bought_price * lots*65
         
         # Final Net PnL
         net_pnl = gross_sold - gross_bought
@@ -681,4 +681,5 @@ st.markdown("---")
 
 # 4. Raw Trade Log (Full Width)
 st.subheader("📚 Detailed Trade Log")
+
 st.dataframe(df_trades, use_container_width=True)
