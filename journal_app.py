@@ -110,8 +110,8 @@ def render_calculator_popover():
         # If 'lots' = 1, we assume it means 1 unit. If you trade 75 units, input 75.
         
         # Calculate Gross Sold Value and Gross Bought Value
-        gross_sold = sold_price * lots *65
-        gross_bought = bought_price * lots*65
+        gross_sold = sold_price * lots *75
+        gross_bought = bought_price * lots*75
         
         # Final Net PnL
         net_pnl = gross_sold - gross_bought
@@ -145,6 +145,34 @@ def render_calculator_popover():
 # Note: If your 'Lots' input means a multiplier (e.g., 1 lot = 100 shares), 
 # you should adjust the calculation: gross_sold = sold_price * lots * 100
 
+def render_aroc_calculator_popover():
+    """Renders the Annualized Return on Capital (AROC) calculator."""
+
+    with st.popover("📉 AROC Calc", use_container_width=True):
+        st.markdown("### AROC Calculator")
+        st.caption("Formula: (Profit / Capital) * (365 / Days) * 100")
+
+        # --- Input Section ---
+        p_left = st.number_input("Profit Left (₹)", min_value=0.0, value=0.0, format="%.2f", key="aroc_profit")
+        cap_used = st.number_input("Capital Used (₹)", min_value=1.0, value=100000.0, format="%.2f", key="aroc_cap")
+        days_to_expiry = st.number_input("Days to Expiry", min_value=1, value=7, step=1, key="aroc_days")
+
+        st.markdown("---")
+
+        # --- Calculation Logic ---
+        # Formula: (PROFIT LEFT/CAPITAL USED)*(365/DAYS TO EXPIRY)*100
+        aroc = (p_left / cap_used) * (365 / days_to_expiry) * 100
+
+        # --- Output Section ---
+        st.metric(
+            label="Annualized Return (AROC)",
+            value=f"{aroc:.2f}%",
+            help="This represents your projected yearly return based on the current trade duration."
+        )
+
+        # Helper info
+        actual_return = (p_left / cap_used) * 100
+        st.info(f"Absolute Return for this trade: **{actual_return:.2f}%**")
 
 # --- Functions for Visualization (Updated plot_cumulative_pnl) ---
 
@@ -554,17 +582,20 @@ def render_calendar_view(pnl_lookup, daily_pnl):
 
 # --- UI LAYOUT ---
 st.markdown("## Dhruv's Analytics Dashboard")
-col_title, col_calc, col_analyzer = st.columns([6, 1, 1])
 
-
+# Updated columns: Added one more column for the AROC calculator
+col_title, col_calc, col_aroc, col_analyzer = st.columns([5, 1, 1, 1])
 
 with col_calc:
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True) 
-    render_calculator_popover() # Existing PnL calculator
+    render_calculator_popover() 
+
+with col_aroc:
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True) 
+    render_aroc_calculator_popover() # <--- NEW: AROC Calculator
 
 with col_analyzer:
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True) 
-    # NEW: Call the function to render the Scorecard popover
     render_scorecard_popover()
 
 
@@ -681,5 +712,4 @@ st.markdown("---")
 
 # 4. Raw Trade Log (Full Width)
 st.subheader("📚 Detailed Trade Log")
-
 st.dataframe(df_trades, use_container_width=True)
